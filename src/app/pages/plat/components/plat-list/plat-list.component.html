@@ -1,0 +1,9 @@
+<ul *ngIf="!IsLoading;else loading">
+    <li *ngFor="let plat of Plats" (click)="this.SelectedPlat = plat">{{ plat.title }}</li>
+</ul>
+
+<paginator (left)="getPrevious($event)" (right)="getNext($event)" [page]="currentPage"></paginator>
+
+<ng-template #loading>
+    <p>LOADING</p>
+</ng-template>

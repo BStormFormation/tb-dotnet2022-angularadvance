@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col-6">
+        <plat-list (selectedPlat)="onPlatSelected($event)"></plat-list>
+    </div>
+    <div class="col-6" *ngIf="Composition != null">
+        <plat-composition [composition]="Composition"></plat-composition>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<p>plat-composition works!</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ingredient</th>
+            <th>Quantité</th>
+            <th>Unite</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let compo of Composition">
+            <td>{{ compo.ingredient.name }}</td>
+            <td>{{ compo.qtt }}</td>
+            <td>{{ compo.unit }}</td>
+        </tr>
+    </tbody>
+</table>

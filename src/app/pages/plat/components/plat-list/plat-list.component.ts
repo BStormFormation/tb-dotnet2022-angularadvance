@@ -1,0 +1,51 @@
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ListState, Plat } from '../../models/plat';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { PlatService } from './../../services/plat.service';
+
+@Component({
+    selector: 'plat-list',
+    templateUrl: './plat-list.component.html',
+    styleUrls: ['./plat-list.component.scss']
+})
+export class PlatListComponent implements OnInit {
+    @Output("selectedPlat")
+    private selectedPlatEvent = new EventEmitter<Plat>();
+    currentPage: number = 0;
+    set SelectedPlat(plat: Plat) {
+        this.selectedPlatEvent.emit(plat);
+    }
+
+    private _plats: Plat[] = [];
+    set Plats(v: Plat[]) { this._plats = v; }
+    get Plats() { return this._plats; }
+
+    private _isLoading: boolean = false;
+    get IsLoading() { return this._isLoading; }
+    set IsLoading(v: boolean) { this._isLoading = v; }
+
+    constructor(private $service: PlatService) {
+        this.$service.State$.subscribe((state: ListState<Plat>) => {
+            this.IsLoading = state.loading;
+            this.Plats = state.data;
+        })
+        // this.$service.subscribe((state: PlatState) => {
+        //     console.log(state);
+        //     this.IsLoading = state.loading;
+        //     this.Plats = state.data;
+        // })
+    }
+
+    ngOnInit(): void {
+        this.$service.findAll()
+    }
+
+    getPrevious(page: number) {
+        this.currentPage = page;
+        this.$service.findAll(this.currentPage);
+    }
+    getNext(page: number) {
+        this.currentPage = page;
+        this.$service.findAll(this.currentPage);
+    }
+}
