@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Subject, Subscription, Observable, map } from 'rxjs';
 import { ListState, Plat } from '../models/plat';
+import { StateService } from 'src/app/modules/shared/services/state.service';
 
 const initialState: ListState<Plat> = {
     loading: false,
@@ -12,7 +13,7 @@ const initialState: ListState<Plat> = {
 }
 
 @Injectable()
-export class PlatService {
+export class PlatService extends StateService<Plat> {
     private _state: ListState<Plat> = initialState;
     private _state$ = new BehaviorSubject<ListState<Plat>>(this._state);
 
