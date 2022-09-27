@@ -3,11 +3,15 @@ import { QueryParams } from "../types/crud.type";
 import { Page } from "../types/page.type";
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PageState } from "../types/state.type";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, map, Observable } from "rxjs";
 
-export abstract class StateService<T> implements PageCrud<T> {
+export abstract class PageStateService<T> implements PageCrud<T> {
     protected _state$: BehaviorSubject<PageState<T>>;
     get State$(): Observable<PageState<T>> { return this._state$.asObservable() }
+    set State(v: Partial<PageState<T>>) {
+        this.$state = { ...this.$state, ...v };
+        this._state$.next(this.$state);
+    }
 
     constructor(protected $http: HttpClient, protected $state: PageState<T>, protected $url: string) {
         this._state$ = new BehaviorSubject<PageState<T>>(this.$state);
@@ -23,15 +27,25 @@ export abstract class StateService<T> implements PageCrud<T> {
         return JSON.stringify(statePagination) == JSON.stringify(pagination);
     }
 
-    findPage(page: number, limit: number): Page<T> {
+    findPage(page: number = 1, limit: number = 5): Page<T> {
         if (this.hasPage(page, limit)) {
             const newState = this.$state.pages.get(JSON.stringify({ page, limit }))!
-            this.$state = { ...this.$state, ...newState };
+            this.State = { ...this.$state, ...newState };
         } else if (!this.isCurrentPage(page, limit)) {
-            this.$state = { ...this.$state, loading: true };
+            this.State = { ...this.$state, loading: true };
             const params = new HttpParams().appendAll({ "_page": page, "_limit": limit });
             this.$http
                 .get<Page<T>>(this.$url, { params })
+                //TODO ATTENTION A RETIRER DANS LE CADRE D4UNE VREAI API
+                .pipe(
+                    map((data: any) => ({
+                        next: { page: page + 1, limit },
+                        previous: { page: page - 1, limit },
+                        pagination: { page, limit },
+                        data,
+                        totalPages: 500
+                    }) as Page<T>)
+                )
                 .subscribe((data: Page<T>) => this.pageSubscriber(data));
         }
 
