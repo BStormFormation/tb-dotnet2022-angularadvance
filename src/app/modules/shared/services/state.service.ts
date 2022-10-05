@@ -27,13 +27,13 @@ export abstract class PageStateService<T> implements PageCrud<T> {
         return JSON.stringify(statePagination) == JSON.stringify(pagination);
     }
 
-    findPage(page: number = 1, limit: number = 5): Page<T> {
+    findPage(page: number = 1, limit: number = 5, opts: any = {}): Page<T> {
         if (this.hasPage(page, limit)) {
             const newState = this.$state.pages.get(JSON.stringify({ page, limit }))!
             this.State = { ...this.$state, ...newState };
         } else if (!this.isCurrentPage(page, limit)) {
             this.State = { ...this.$state, loading: true };
-            const params = new HttpParams().appendAll({ "_page": page, "_limit": limit });
+            const params = new HttpParams().appendAll({ "_page": page, "_limit": limit, ...opts });
             this.$http
                 .get<Page<T>>(this.$url, { params })
                 //TODO ATTENTION A RETIRER DANS LE CADRE D4UNE VREAI API

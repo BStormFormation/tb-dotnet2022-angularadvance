@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "start:db": "pnpx json-server --watch ./db/menu.json",
     "db:hydrate": "pnpm run ./faker.ts",
-    "start": "ng serve",
+    "start": "ng serve --open",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

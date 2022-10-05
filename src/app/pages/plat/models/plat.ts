@@ -14,3 +14,13 @@ export type ListState<T> = {
     limit: number
     pages: Map<string, T[]>
 }
+
+export type Content = {
+    platId: number,
+    qtt: number,
+    unit: string,
+    ingredient: {
+        id: number,
+        name: string
+    }
+}
