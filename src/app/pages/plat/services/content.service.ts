@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { PageStateService } from 'src/app/modules/shared/services/state.service';
 import { PageState } from 'src/app/modules/shared/types/state.type';
 import { Content, Plat } from '../models/plat';
@@ -17,13 +18,15 @@ const initialState: PageState<Content> = {
 @Injectable({
   providedIn: 'root'
 })
-export class ContentService extends PageStateService<Content> {
+export class ContentService {
 
-  constructor($http: HttpClient) { 
-    super($http, initialState, "http://localhost:3000/contents");
+  constructor(private $http: HttpClient) { 
   }
 
-  findContentsByPlatId(platId: number) {
-    return this.findPage(1, 5, {platId, "_expand": "ingredient"})
+  findContentsByPlatId(platId: number, opts?: any): Observable<Content[]> {
+    // const opts = {nom: "Flavian", "prenom": "Blop"}
+    const params = new HttpParams()
+      .appendAll({platId, "_expand": "ingredient", ...opts});
+    return this.$http.get<Content[]>("http://localhost:3000/contents", {params})
   }
 }

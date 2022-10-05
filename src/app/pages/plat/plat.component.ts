@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatModalDirective } from 'src/app/modules/shared/directives/mat-modal.directive';
 import { Plat } from './models/plat';
 import { ContentService } from './services/content.service';
 import { PlatService } from './services/plat.service';
@@ -9,22 +10,24 @@ import { PlatService } from './services/plat.service';
     styleUrls: ['./plat.component.scss']
 })
 export class PlatComponent implements OnInit {
-    public _composition: any;
-    get Composition(): any { return this._composition; }
-    set Composition(v: any) { this._composition = v; }
+    @ViewChild(MatModalDirective, {static: true}) //Recherche dans le template la directive MatModalDirective
+    matModal: MatModalDirective | undefined;
 
-    constructor(private $service: PlatService, private $content: ContentService) { }
+    public _platId: any;
+    get PlatId(): any { return this._platId; }
+    set PlatId(v: any) { this._platId = v; }
+
+    constructor() { }
 
     ngOnInit(): void {
-        this.$content.State$.subscribe(state => console.log(state));
+        // if (this.matModal) {
+        //     this.matModal.Options = {inDuration: 300};
+        // }
     }
 
 
     onPlatSelected(plat: Plat) {
-        console.log(plat);
-        this.$content.findContentsByPlatId(plat.id)
-        // this.$service.findComposition(plat.id).subscribe((composition: any) => {
-        //     this.Composition = composition;
-        // })
+        this.PlatId = plat.id;
+        this.matModal?.open();
     }
 }

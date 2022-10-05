@@ -1,8 +1,14 @@
 <div class="row">
-    <div class="col-6">
+    <div class="col s12">
         <plat-list (selectedPlat)="onPlatSelected($event)"></plat-list>
     </div>
-    <div class="col-6" *ngIf="Composition != null">
-        <plat-composition [composition]="Composition"></plat-composition>
+</div>
+
+<div [matModal]="{inDuration: 1000}" id="modal1" class="modal">
+    <div class="modal-content">
+        <plat-composition [platId]="PlatId"></plat-composition>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Agree</a>
     </div>
 </div>

@@ -55,7 +55,7 @@ export abstract class PageStateService<T> implements PageCrud<T> {
         const { next, data, previous, pagination, totalPages } = page;
         this.$state.pages.set(JSON.stringify(pagination), { next, data, previous, pagination, totalPages })
         this.$state = { ...this.$state, loading: false, data, next, previous, pagination };
-        this._state$.next(this.$state);
+        setTimeout(() => this._state$.next(this.$state), 3000);
     }
     findPredicatePage(predicate: Partial<{ where: QueryParams; sort: QueryParams; }>, page: number, limit: number): Page<T> {
         throw new Error("Method not implemented.");

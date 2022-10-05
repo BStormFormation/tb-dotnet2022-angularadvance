@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Content } from '../../models/plat';
+import { ContentService } from '../../services/content.service';
 
 @Component({
     selector: 'plat-composition',
@@ -6,17 +8,16 @@ import { Component, Input, OnInit } from '@angular/core';
     styleUrls: ['./plat-composition.component.scss']
 })
 export class PlatCompositionComponent implements OnInit {
-    private _composition: any;
-    get Composition(): any { return this._composition; }
-    @Input("composition")
-    set Composition(v: any) {
-        console.log(v);
-        this._composition = v;
+    private _contents: Content[] = [];
+    get Contents(): Content[] { return this._contents; }
+
+    @Input("platId")
+    set PlatId(v: number) {
+        this.$content.findContentsByPlatId(v).subscribe(data => this._contents = data);
     }
 
-    constructor() { }
+    constructor(private $content: ContentService) { }
 
     ngOnInit(): void {
     }
-
 }
