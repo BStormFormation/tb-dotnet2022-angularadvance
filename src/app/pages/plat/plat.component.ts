@@ -13,6 +13,8 @@ export class PlatComponent implements OnInit {
     @ViewChild(MatModalDirective, {static: true}) //Recherche dans le template la directive MatModalDirective
     matModal: MatModalDirective | undefined;
 
+    data: any = {username: 'Flavian'};
+
     public _platId: any;
     get PlatId(): any { return this._platId; }
     set PlatId(v: any) { this._platId = v; }
@@ -23,6 +25,10 @@ export class PlatComponent implements OnInit {
         // if (this.matModal) {
         //     this.matModal.Options = {inDuration: 300};
         // }
+    }
+
+    handleOpenStart() {
+        console.log("START");
     }
 
 

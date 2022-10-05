@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Modal, ModalOptions } from 'materialize-css';
 
 @Directive({
@@ -13,13 +13,14 @@ export class MatModalDirective implements OnInit {
 
   get Element(): HTMLElement { return this.$el.nativeElement; }
 
+  @Output("openStart") openStartEvent = new EventEmitter<void>();
+  
   constructor(
     private $el: ElementRef<HTMLElement>
   ) { }
 
   ngOnInit() {
-    console.log(this.options);
-    this._modal = Modal.init(this.Element, {...this.options});
+    this._modal = Modal.init(this.Element, {...this.options, onOpenStart: (el) => this.openStartEvent.emit()});
   }
 
   open() {
